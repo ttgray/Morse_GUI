@@ -1,0 +1,68 @@
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import tkinter.font
+import time
+from gpiozero import LED
+import RPi.GPIO
+RPi.GPIO.setmode(RPi.GPIO.BCM)
+led = LED(17)
+
+Dictionary = {'A':'.-', 'B':'-...', 
+                'C':'-.-.', 'D':'-..', 'E':'.', 
+                'F':'..-.', 'G':'--.', 'H':'....', 
+                'I':'..', 'J':'.---', 'K':'-.-', 
+                'L':'.-..', 'M':'--', 'N':'-.', 
+                'O':'---', 'P':'.--.', 'Q':'--.-', 
+                'R':'.-.', 'S':'...', 'T':'-', 
+                'U':'..-', 'V':'...-', 'W':'.--', 
+                'X':'-..-', 'Y':'-.--', 'Z':'--..', 
+                '1':'.----', '2':'..---', '3':'...--', 
+                '4':'....-', '5':'.....', '6':'-....', 
+                '7':'--...', '8':'---..', '9':'----.', 
+                '0':'-----', ', ':'--..--', '.':'.-.-.-', 
+                '?':'..--..', '/':'-..-.', '-':'-....-', 
+                '(':'-.--.', ')':'-.--.-'
+}
+
+
+def convert_to_morsecode(inputValue):
+    if len(inputValue.get()) > 12:
+        tk.messagebox.showinfo("Alert message", "Too many letters, 12 or less please")
+    elif len(inputValue.get()) <= 12:
+        InputValue = inputValue.get().upper()
+        encodedinputValue = ""
+        for character in InputValue:
+            encodedinputValue += Dictionary[character] + ""
+        return encodedinputValue
+
+def morse_code(Value):
+    if Value == 1: # Dot
+        led.on()
+        time.sleep(0.25)
+        led.off()
+        time.sleep(0.25)
+    elif Value == 0: # Dash
+        led.on()
+        time.sleep(1)
+        led.off()
+        time.sleep(0.25)
+
+def runLED():
+    encodedinputValue = convert_to_morsecode(inputValue)
+    for i in range(len(encodedinputValue)):
+        if (encodedinputValue[i] == "."):
+          morse_code(1)
+        elif (encodedinputValue[i] == "-"):
+          morse_code(0)
+
+win = tk.Tk()
+inputValue = tk.StringVar()
+win.title("Morse code generator")
+myFont = tk.font.Font(family = "Helvetica", size = 12, weight = "bold")
+Label = tk.Label(win, text = "Enter word here:", font = myFont).grid(row = 0)
+Entry = tk.Entry(win, textvariable = inputValue).grid(row = 0, column = 1)
+Button = tk.Button(win, text = "Create Morse code", font = myFont, command = runLED).grid(row = 1)
+
+win.mainloop()
+
