@@ -62,7 +62,7 @@ win.title("Morse code generator")
 myFont = tk.font.Font(family = "Helvetica", size = 12, weight = "bold")
 Label = tk.Label(win, text = "Enter word here:", font = myFont).grid(row = 0)
 Entry = tk.Entry(win, textvariable = inputValue).grid(row = 0, column = 1)
-Button = tk.Button(win, text = "Create Morse code", font = myFont, command = runLED).grid(row = 1)
+Button = tk.Button(win, text = "Create Morse code", font = myFont, command = runLED).grid(row = 1, columnspan = 2)
 
 win.mainloop()
 
